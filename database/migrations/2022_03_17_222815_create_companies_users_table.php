@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('companies_users', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('companies_jobs', function (Blueprint $table) {
+            $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('user_id');
         });
     }
 
