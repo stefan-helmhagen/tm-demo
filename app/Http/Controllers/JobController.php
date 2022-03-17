@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
 use Illuminate\Http\Request;
+use App\Models\Job;
+use Illuminate\Support\Facades\DB;
 
 class JobController extends Controller
 {
@@ -14,7 +15,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        //
+        return DB::table('jobs')->get();
     }
 
     /**
@@ -35,7 +36,15 @@ class JobController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $job = new Job([
+            'company_id'            => $request->company_id,
+            'created_by_user_id'    => '0',
+            'updated_by_user_id'    => '0',
+            'title'                 => $request->title,
+            'description'           => $request->description,
+            'location'              => $request->location
+        ]);
+        $job->save();
     }
 
     /**
@@ -46,7 +55,18 @@ class JobController extends Controller
      */
     public function show(Job $job)
     {
-        //
+        return $job;
+    }
+
+    /**
+     * Display the company related to the specified job.
+     *
+     * @param  \App\Models\Job  $job
+     * @return \Illuminate\Http\Response
+     */
+    public function showCompany(Job $job)
+    {
+        return $job->company;
     }
 
     /**
@@ -69,7 +89,13 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job)
     {
-        //
+        is_null($request->company_id) ?         : $job->company_id = $request->company_id;
+        is_null($request->created_by_user_id) ? : $job->created_by_user_id = $request->created_by_user_id;
+        is_null($request->updated_by_user_id) ? : $job->updated_by_user_id = $request->updated_by_user_id;
+        is_null($request->title) ?              : $job->title = $request->title;
+        is_null($request->description) ?        : $job->description = $request->description;
+        is_null($request->location) ?           : $job->location = $request->location;
+        $job->save();
     }
 
     /**
@@ -80,6 +106,6 @@ class JobController extends Controller
      */
     public function destroy(Job $job)
     {
-        //
+        $job->delete();
     }
 }

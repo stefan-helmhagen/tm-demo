@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use Illuminate\Http\Request;
+use App\Models\Company;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -14,7 +15,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        //
+        return DB::table('companies')->get();
     }
 
     /**
@@ -35,18 +36,44 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $company = new Company([
+            'name'      => $request->name,
+            'location'  => $request->location
+        ]);
+        $company->save();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Company  $company
+     * @param  Company $company
      * @return \Illuminate\Http\Response
      */
     public function show(Company $company)
     {
-        //
+        return $company;
+    }
+
+    /**
+     * Display all jobs related to the specified company.
+     * 
+     * @param  Company $company
+     * @return \Illuminate\Http\Response
+     */
+    public function showJobs(Company $company)
+    {
+        return $company->jobs;
+    }
+
+    /**
+     * Display all users related to the specified company.
+     * 
+     * @param  Company $company
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsers(Company $company)
+    {
+        return $company->users;
     }
 
     /**
@@ -69,7 +96,9 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        //
+        is_null($request->name) ?       : $company->name = $request->name;
+        is_null($request->location) ?   : $company->location = $request->location;
+        $company->save();
     }
 
     /**
@@ -80,6 +109,6 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        //
+        $company->delete();
     }
 }
